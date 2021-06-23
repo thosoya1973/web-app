@@ -116,6 +116,7 @@ app.get("/expenses", requiresAuth(), async (req, res, next) => {
     expenses,
   });
 });
+*/
 
 app.get("/expenses", requiresAuth(), async (req, res, next) => {
  try {
@@ -128,19 +129,16 @@ app.get("/expenses", requiresAuth(), async (req, res, next) => {
   next(err);
  }
 });
-*/
 
+/*
 app.get("/expenses", requiresAuth(), async (req, res, next) => {
  try {
-  // 👇 get the token from the request 👇
   const { token_type, access_token } = req.oidc.accessToken;
-  // 👇 then send it as an authorization header 👇
   const expenses = await axios.get(`${API_URL}/reports`, {
    headers: {
     Authorization: `${token_type} ${access_token}`,
    },
   });
-  // 👆 end of changes 👆
   res.render("expenses", {
    user: req.oidc && req.oidc.user,
    expenses: expenses.data,
@@ -149,6 +147,7 @@ app.get("/expenses", requiresAuth(), async (req, res, next) => {
   next(err);
  }
 });
+*/
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
