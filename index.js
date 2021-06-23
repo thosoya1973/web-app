@@ -6,6 +6,7 @@ const logger = require("morgan");
 const path = require("path");
 const { createServer } = require("http");
 const { auth, requiresAuth } = require("express-openid-connect");
+const axios = require("axios").default;
 
 const {
   checkUrl,
@@ -45,7 +46,7 @@ app.use(
       baseURL: APP_URL,
    })
 );
-
+/*
 const expenses = [
   {
     date: new Date(),
@@ -66,6 +67,19 @@ app.get("/", async (req, res) => {
     count: expenses.length,
   });
 });
+*/
+app.get("/", async (req, res, next) => {
+ try {
+  const summary = await axios.get(`${API_URL}/total`);
+  res.render("home", {
+   user: req.oidc && req.oidc.user,
+   total: summary.data.total,
+   count: summary.data.count,
+  });
+} catch (err) {
+  next(err);
+}
+});
 
 // 👇 add requiresAuth middlware to these private routes  👇
 
@@ -77,12 +91,24 @@ app.get("/user", requiresAuth(), async (req, res) => {
     refresh_token: req.oidc && req.oidc.refreshToken,
   });
 });
-
+/*
 app.get("/expenses", requiresAuth(), async (req, res, next) => {
   res.render("expenses", {
     user: req.oidc && req.oidc.user,
     expenses,
   });
+});
+*/
+app.get("/expenses", requiresAuth(), async (req, res, next) => {
+ try {
+  const expenses = await axios.get(`${API_URL}/reports`);
+  res.render("expenses", {
+   user: req.oidc && req.oidc.user,
+   expenses: expenses.data,
+  });
+ } catch (err) {
+  next(err);
+ }
 });
 
 // catch 404 and forward to error handler
