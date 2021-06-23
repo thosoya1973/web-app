@@ -62,10 +62,10 @@ const expenses = [
 
 app.use(
  auth({
-  secret: SESSION_SECRET,
+  secret: CLIENT_SECRET,
   authRequired: false,
   auth0Logout: true,
-  baseURL: APP_URL,
+  baseURL: API_URL,
   // 👇 add this 👇
   authorizationParams: {
    response_type: "code id_token",
