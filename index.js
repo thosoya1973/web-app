@@ -46,6 +46,7 @@ app.use(
       baseURL: APP_URL,
    })
 );
+
 /*
 const expenses = [
   {
@@ -60,21 +61,6 @@ const expenses = [
   },
 ];
 
-app.use(
- auth({
-  secret: CLIENT_SECRET,
-  authRequired: false,
-  auth0Logout: true,
-  baseURL: API_URL,
-  // 👇 add this 👇
-  authorizationParams: {
-   response_type: "code id_token",
-   audience: "https://expenses-api",
-  },
-  // 👆 add this 👆
- })
-);
-
 app.get("/", async (req, res) => {
   res.render("home", {
     user: req.oidc && req.oidc.user,
@@ -83,6 +69,7 @@ app.get("/", async (req, res) => {
   });
 });
 */
+
 app.get("/", async (req, res, next) => {
  try {
   const summary = await axios.get(`${API_URL}/total`);
@@ -106,6 +93,7 @@ app.get("/user", requiresAuth(), async (req, res) => {
     refresh_token: req.oidc && req.oidc.refreshToken,
   });
 });
+
 /*
 app.get("/expenses", requiresAuth(), async (req, res, next) => {
   res.render("expenses", {
@@ -126,6 +114,20 @@ app.get("/expenses", requiresAuth(), async (req, res, next) => {
  }
 });
 */
+
+app.use(
+ auth({
+  secret: SESSION_SECRET,
+  authRequired: false,
+  auth0Logout: true,
+  baseURL: APP_URL,
+  authorizationParams: {
+   response_type: "code id_token",
+   audience: "https://expenses-api",
+  },
+ })
+);
+
 app.get("/expenses", requiresAuth(), async (req, res, next) => {
  try {
   // 👇 get the token from the request 👇
