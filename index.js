@@ -98,8 +98,6 @@ app.get("/", async (req, res, next) => {
 }
 });
 
-// 👇 add requiresAuth middlware to these private routes  👇
-
 app.get("/user", requiresAuth(), async (req, res) => {
   res.render("user", {
     user: req.oidc && req.oidc.user,
@@ -117,7 +115,7 @@ app.get("/expenses", requiresAuth(), async (req, res, next) => {
   });
 });
 */
-
+/*
 app.get("/expenses", requiresAuth(), async (req, res, next) => {
  try {
   const expenses = await axios.get(`${API_URL}/reports`);
@@ -129,8 +127,8 @@ app.get("/expenses", requiresAuth(), async (req, res, next) => {
   next(err);
  }
 });
+*/
 
-/*
 app.get("/expenses", requiresAuth(), async (req, res, next) => {
  try {
   const { token_type, access_token } = req.oidc.accessToken;
@@ -147,7 +145,6 @@ app.get("/expenses", requiresAuth(), async (req, res, next) => {
   next(err);
  }
 });
-*/
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
